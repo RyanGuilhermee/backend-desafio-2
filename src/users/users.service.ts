@@ -11,12 +11,16 @@ import {
 } from '../repositories/users.repository';
 import { FindUserDto } from './dto/find-user.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService implements IUsersRepository {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private jwtService: JwtService,
+  ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<FindUserDto> {
+  async create(createUserDto: CreateUserDto) {
     const userExists = await this.findOneByEmail(createUserDto.email);
 
     if (userExists) {
@@ -29,10 +33,15 @@ export class UsersService implements IUsersRepository {
     createUserDto.data_atualizacao = new Date(Date.now());
     createUserDto.ultimo_login = new Date(Date.now());
 
-    return this.usersRepository.create(createUserDto);
+    const user = await this.usersRepository.create(createUserDto);
+
+    return {
+      ...user,
+      token: await this.jwtService.signAsync({ user_id: user.id }),
+    };
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<FindUserDto> {
     const user = await this.usersRepository.findOne(id);
 
     if (!user) {
@@ -46,11 +55,11 @@ export class UsersService implements IUsersRepository {
     return this.usersRepository.findOneByEmail(email);
   }
 
-  findAll() {
+  findAll(): Promise<FindUserDto[]> {
     return this.usersRepository.findAll();
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<FindUserDto> {
     await this.findOne(id);
 
     if (updateUserDto.senha) {
