@@ -8,11 +8,14 @@ datasource db {
 }
 
 model Usuario {
-  id        String     @id @default(uuid())
-  nome      String
-  email     String     @unique
-  senha     String
-  telefones Telefone[]
+  id               String     @id @default(uuid())
+  nome             String
+  email            String     @unique
+  senha            String
+  telefones        Telefone[]
+  data_criacao     DateTime?
+  data_atualizacao DateTime?
+  ultimo_login     DateTime?
 
   @@map("usuarios")
 }
