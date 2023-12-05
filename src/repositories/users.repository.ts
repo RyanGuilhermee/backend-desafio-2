@@ -11,7 +11,7 @@ export interface IUsersRepository {
 
   findOne(id: string): Promise<FindUserDto>;
 
-  findOneByEmail(email: string): Promise<boolean>;
+  findOneByEmail(email: string): Promise<FindUserDto | null>;
 
   findAll(): Promise<FindUserDto[]>;
 }
@@ -77,16 +77,22 @@ export class UsersRepository extends PrismaClient implements IUsersRepository {
     return userDto;
   }
 
-  async findOneByEmail(email: string): Promise<boolean> {
+  async findOneByEmail(email: string): Promise<FindUserDto | null> {
     const user = await this.usuario.findFirst({
       where: { email },
     });
 
     if (!user) {
-      return false;
+      return null;
     }
 
-    return true;
+    const userDto = new FindUserDto();
+    userDto.id = user.id;
+    userDto.nome = user.nome;
+    userDto.email = user.email;
+    userDto.senha = user.senha;
+
+    return userDto;
   }
 
   async findAll(): Promise<FindUserDto[]> {
