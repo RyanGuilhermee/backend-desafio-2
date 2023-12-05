@@ -6,3 +6,23 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Usuario {
+  id        String     @id @default(uuid())
+  nome      String
+  email     String     @unique
+  senha     String
+  telefones Telefone[]
+
+  @@map("usuarios")
+}
+
+model Telefone {
+  id         String  @id @default(uuid())
+  numero     String
+  ddd        String
+  Usuario    Usuario @relation(fields: [usuario_id], references: [id])
+  usuario_id String
+
+  @@map("telefones")
+}
