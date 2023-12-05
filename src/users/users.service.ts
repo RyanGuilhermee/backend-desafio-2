@@ -51,7 +51,7 @@ export class UsersService implements IUsersRepository {
     return this.usersRepository.findOne(id);
   }
 
-  findOneByEmail(email: string): Promise<boolean> {
+  findOneByEmail(email: string): Promise<FindUserDto | null> {
     return this.usersRepository.findOneByEmail(email);
   }
 
