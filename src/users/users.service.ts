@@ -37,7 +37,10 @@ export class UsersService implements IUsersRepository {
 
     return {
       ...user,
-      token: await this.jwtService.signAsync({ user_id: user.id }),
+      token: await this.jwtService.signAsync(
+        { user_id: user.id },
+        { secret: process.env.JWT_SECRET },
+      ),
     };
   }
 
