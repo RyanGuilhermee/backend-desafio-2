@@ -35,13 +35,12 @@ export class UsersService implements IUsersRepository {
 
     const user = await this.usersRepository.create(createUserDto);
 
-    return {
-      ...user,
-      token: await this.jwtService.signAsync(
-        { user_id: user.id },
-        { secret: process.env.JWT_SECRET },
-      ),
-    };
+    user.token = await this.jwtService.signAsync(
+      { user_id: user.id },
+      { secret: process.env.JWT_SECRET },
+    );
+
+    return user;
   }
 
   async findOne(id: string): Promise<FindUserDto> {
@@ -51,7 +50,7 @@ export class UsersService implements IUsersRepository {
       throw new NotFoundException({ mensagem: 'Usuário não encontrado' });
     }
 
-    return this.usersRepository.findOne(id);
+    return user;
   }
 
   findOneByEmail(email: string): Promise<FindUserDto | null> {
