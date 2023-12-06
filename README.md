@@ -40,3 +40,40 @@ $ npm run test
 # cobertura de testes
 $ npm run test:cov
 ```
+
+## Hospedagem
+
+- AWS
+- URL base: http://52.67.173.17:3000/
+
+## Rotas
+
+- **Sign up** - POST
+
+```
+/auth/sign-up
+```
+
+- **Sign in** - POST
+
+```
+/auth/sign-in
+```
+
+- **Buscar todos os usuários** - GET
+
+```
+/user/
+```
+
+- **Buscar um usuário** - GET
+
+```
+/user/{id}
+```
+
+- **Atualizar um usuário** - PATCH
+
+```
+/user/{id}
+```
