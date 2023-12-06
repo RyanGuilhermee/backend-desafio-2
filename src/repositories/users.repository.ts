@@ -47,6 +47,7 @@ export class UsersRepository extends PrismaClient implements IUsersRepository {
         email: updateUserDto.email,
         senha: updateUserDto.senha,
         data_atualizacao: updateUserDto.data_atualizacao,
+        ultimo_login: updateUserDto.ultimo_login,
       },
     });
 
@@ -88,9 +89,10 @@ export class UsersRepository extends PrismaClient implements IUsersRepository {
 
     const userDto = new FindUserDto();
     userDto.id = user.id;
-    userDto.nome = user.nome;
-    userDto.email = user.email;
     userDto.senha = user.senha;
+    userDto.data_criacao = user.data_criacao;
+    userDto.data_atualizacao = user.data_atualizacao;
+    userDto.ultimo_login = user.ultimo_login;
 
     return userDto;
   }
